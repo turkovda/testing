@@ -1,0 +1,44 @@
+Do:
+  Host: 192.168.42.9
+  User: shellstest
+  Password: Do@QualiUkr
+  Domain: Quali IL
+  CS Version: CloudShell 9.3 GA IL
+  Networking Apps:
+    - Name: Cisco
+      Blueprint Name: Cisco IOSv Router
+FTP:
+  Host: 192.168.42.102
+  User: quali
+  Password: Password1
+SCP:
+  Host: 192.168.42.102
+  User: quali
+  Password: Password1
+TFTP:
+  Host: 192.168.42.102
+Shells:
+  - Name: &cisco-sh Cisco Shell
+    Path: Shell.zip
+  - Name: &dut-sh DUT
+    Path: https://github.com/QualiSystems/DUT-Shell-2G/releases/download/0.2.1/DutShell2G.zip
+    Tests:
+      Run Tests: False
+
+Resources:
+  - Name: &cisco-r Cisco-device1
+    Networking App: Cisco
+    Shell Name: *cisco-sh
+    Attributes:
+      SNMP Read Community: public
+    Additional Ports:
+      - Name: Port 1
+      - Name: Port 2
+  - Name: &dut-r DUT
+    Shell Name: *dut-sh
+
+Sandboxes:
+  - Name: *cisco-r
+    Resources:
+      - *cisco-r
+      - *dut-r
